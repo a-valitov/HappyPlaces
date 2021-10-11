@@ -3,7 +3,7 @@
     <!--    Blueberry basket set of colors   -->
     <color name="colorPrimary">#283655</color>
     <color name="colorPrimaryDark">#1e1f26</color>
-    <color name="colorAccent">#d0e1f9</color>
+    <color name="colorAccent">#4d648d</color>
 
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
@@ -12,9 +12,12 @@
     <color name="teal_700">#FF018786</color>
 
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="primary_text_color">#818181</color>
+    <color name="secondary_text_color">#A2A2A2</color>
+    <color name="button_background_color">#63ace5</color>
 
-<!--    So many lost songs -->
+    <!--    So many lost songs -->
 <!--    #051e3e • #251e3e • #451e3e • #651e3e • #851e3e-->
 
 <!--    Moonlight bytes 6-->
@@ -25,4 +28,5 @@
 
 <!--    Blueberry basket-->
 <!--    #ffffff • #d0e1f9 • #4d648d • #283655 • #1e1f26-->
+
 </resources>
