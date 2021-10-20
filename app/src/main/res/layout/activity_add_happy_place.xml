@@ -41,14 +41,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/add_screen_til_marginTop"
+                android:backgroundTint="@color/colorAccent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent" >
 
-                <com.google.android.material.textfield.TextInputEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="@color/colorAccent"
                     android:hint="@string/title"
                     android:inputType="textCapWords"
                     android:textColor="@color/primary_text_color"
@@ -95,6 +97,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/date"
                     android:inputType="date"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:textColor="@color/primary_text_color"
                     android:textColorHint="@color/secondary_text_color"
                     android:textSize="@dimen/edit_text_text_size" />
