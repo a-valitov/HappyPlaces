@@ -1,4 +1,4 @@
-package com.avalitov.happyplaces
+package com.avalitov.happyplaces.activities
 
 import android.Manifest
 import android.app.Activity
@@ -21,6 +21,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.avalitov.happyplaces.R
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
