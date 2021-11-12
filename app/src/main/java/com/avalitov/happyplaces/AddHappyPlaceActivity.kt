@@ -5,12 +5,15 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -23,8 +26,7 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import java.io.IOError
-import java.io.IOException
+import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -105,6 +107,10 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                         val contentURI = data.data
                         try {
                             val selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, contentURI)
+
+                            val saveImageToInternalStorage = saveImageToInternalStorage(selectedImageBitmap)
+                            Log.e("Saved image: ", "Path :: $saveImageToInternalStorage")
+
                             ivPlaceImage.setImageBitmap(selectedImageBitmap)
                         } catch (e: IOException) {
                             e.printStackTrace()
@@ -115,7 +121,11 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
                 CAMERA_CODE -> {
-                    val thumbnail : Bitmap = data?.extras?.get("data") as Bitmap
+                    val thumbnail : Bitmap = data?.extras?.get("data") as Bitmap // !! -> ?
+
+                    val saveImageToInternalStorage = saveImageToInternalStorage(thumbnail)
+                    Log.e("Saved image: ", "Path :: $saveImageToInternalStorage")
+
                     ivPlaceImage.setImageBitmap(thumbnail)
                 }
             }
@@ -188,9 +198,33 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         etDate.setText(sdf.format(cal.time))
     }
 
+    //saves the bitmap and returns its URI address on a device
+    private fun saveImageToInternalStorage(bitmap: Bitmap) : Uri {
+        val wrapper = ContextWrapper(applicationContext)
+        // Private mode means other apps cannot access the directory
+        var file = wrapper.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE)
+        // creating an image file with a unique user identifier an a name
+        file = File(file, "${UUID.randomUUID()}.jpg")
+
+        // writing the image file via output stream
+        try {
+            val stream : OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+            stream.flush() // guarantees that bytes previously written to the stream are passed to the OS
+            stream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+
+        return Uri.parse(file.absolutePath)
+    }
+
     companion object {
         private const val GALLERY_CODE = 1
         private const val CAMERA_CODE = 2
+
+        // a local directory on a device where images are stored
+        private const val IMAGE_DIRECTORY = "HappyPlacesImages"
     }
 
 }
