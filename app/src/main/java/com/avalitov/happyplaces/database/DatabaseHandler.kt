@@ -2,7 +2,9 @@ package com.avalitov.happyplaces.database
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import com.avalitov.happyplaces.models.HappyPlaceModel
 
@@ -62,10 +64,39 @@ SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
         return result
     }
 
-//    fun getAllPlacesList() : ArrayList<HappyPlaceModel> {
-//
-//        val list = ArrayList<HappyPlaceModel>()
-//        val db = this.readableDatabase
+    fun getAllPlacesList() : ArrayList<HappyPlaceModel> {
+
+        val happyPlacesList = ArrayList<HappyPlaceModel>()
+        val selectQuery = "SELECT * FROM $TABLE_PLACES"
+        val db = this.readableDatabase
+
+        try {
+            val cursor : Cursor = db.rawQuery(selectQuery, null)
+
+            if(cursor.moveToFirst()){
+                do {
+                    val place = HappyPlaceModel(
+                        cursor.getInt((cursor.getColumnIndex(COLUMN_ID))),
+                        cursor.getString((cursor.getColumnIndex(COLUMN_TITLE))),
+                        cursor.getString((cursor.getColumnIndex(COLUMN_IMAGE_PATH))),
+                        cursor.getString((cursor.getColumnIndex(COLUMN_DESCRIPTION))),
+                        cursor.getString((cursor.getColumnIndex(COLUMN_DATE))),
+                        cursor.getString((cursor.getColumnIndex(COLUMN_LOCATION))),
+                        cursor.getDouble((cursor.getColumnIndex(COLUMN_LATITUDE))),
+                        cursor.getDouble((cursor.getColumnIndex(COLUMN_LONGITUDE)))
+                    )
+
+                    happyPlacesList.add(place)
+                } while (cursor.moveToNext())
+            }
+
+            cursor.close()
+
+        } catch (e: SQLiteException) {
+            db.execSQL(selectQuery)
+            return ArrayList()
+        }
+
 //        val cursor = db.rawQuery("SELECT * FROM $TABLE_PLACES", null)
 //
 //        while (cursor.moveToNext()) {
@@ -75,12 +106,12 @@ SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 //
 //            val place = HappyPlaceModel()
 //
-//            list.add(place)
+//            happyPlacesList.add(place)
 //        }
 //
 //        cursor.close()
-//
-//        return list
-//    }
+
+        return happyPlacesList
+    }
 
 }
