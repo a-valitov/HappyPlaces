@@ -19,6 +19,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.avalitov.happyplaces.R
+import com.avalitov.happyplaces.database.DatabaseHandler
+import com.avalitov.happyplaces.models.HappyPlaceModel
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -30,6 +32,9 @@ import java.util.*
 
 
 lateinit var toolbarAddPlace : Toolbar
+lateinit var etTitle : EditText
+lateinit var etDescription: EditText
+lateinit var etLocation: EditText
 lateinit var etDate : EditText
 lateinit var tvAddImage : TextView
 lateinit var ivPlaceImage : ImageView
@@ -64,6 +69,10 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             updateDateInView()
         }
 
+        etTitle = findViewById(R.id.et_title)
+        etDescription = findViewById(R.id.et_description)
+        etLocation = findViewById(R.id.et_location)
+
         etDate = findViewById(R.id.et_date)
         etDate.setOnClickListener(this)
 
@@ -80,12 +89,14 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when(v!!.id) {
+
             R.id.et_date -> {
                 DatePickerDialog(
                         this, dateSetListener,
                         cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
                         cal.get(Calendar.DAY_OF_MONTH)).show()
             }
+
             R.id.tv_add_image -> {
                 val pictureDialog = AlertDialog.Builder(this)
                 pictureDialog.setTitle("Select Action")
@@ -99,8 +110,45 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                 }
                 pictureDialog.show()
             }
+
             R.id.btn_save -> {
-                // TODO: save the Data model to the Database
+                when {
+                    etTitle.text.isNullOrEmpty() -> {
+                        Toast.makeText(this, "Please enter the title", Toast.LENGTH_SHORT).show()
+                    }
+                    etDescription.text.isNullOrEmpty() -> {
+                        Toast.makeText(this, "Please enter the description", Toast.LENGTH_SHORT).show()
+                    }
+                    etLocation.text.isNullOrEmpty() -> {
+                        Toast.makeText(this, "Please enter the description", Toast.LENGTH_SHORT).show()
+                    }
+                    saveImageToInternalStorage == null -> {
+                        Toast.makeText(this, "Please select the image", Toast.LENGTH_SHORT).show()
+                    } else -> {
+                        // all fields are OK and we can save the Place
+                        val happyPlace = HappyPlaceModel(
+                                id = 0,  //default number, SQLite is going to autoincrement it anyway
+                                title = etTitle.text.toString(),
+                                imagePath = saveImageToInternalStorage.toString(),
+                                description = etDescription.text.toString(),
+                                date = etDate.text.toString(),
+                                location = etLocation.text.toString(),
+                                latitude = mLatitude,
+                                longitude = mLongitude
+                        )
+                        val dbHandler = DatabaseHandler(this)
+                        val addHappyPlace = dbHandler.addPlace(happyPlace)
+                        if (addHappyPlace > 0) {
+                            Toast.makeText(
+                                    this,
+                                    "The happy place details are successfully inserted to DB",
+                                    Toast.LENGTH_SHORT
+                            ).show()
+
+                            finish()    // the Activity may be closed
+                        }
+                    }
+                }
             }
         }
     }
