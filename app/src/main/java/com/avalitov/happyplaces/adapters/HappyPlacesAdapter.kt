@@ -16,6 +16,8 @@ open class HappyPlacesAdapter(
     private val context : Context,
     private val list: ArrayList<HappyPlaceModel>)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    
+    private var onClickListener: OnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
         return PlaceViewHolder(
@@ -31,6 +33,12 @@ open class HappyPlacesAdapter(
             holder.ivImage.setImageURI(Uri.parse(model.imagePath))
             holder.tvTitle.text = model.title
             holder.tvDescription.text = model.description
+
+            holder.itemView.setOnClickListener{
+                if(onClickListener != null){
+                    onClickListener!!.onClick(position, model)
+                }
+            }
         }
     }
 
@@ -43,6 +51,18 @@ open class HappyPlacesAdapter(
         var tvTitle: TextView = itemView.findViewById(R.id.tv_item_title)
         var tvDescription: TextView = itemView.findViewById(R.id.tv_item_description)
         var ivImage: ImageView = itemView.findViewById(R.id.iv_item_place_image)
+    }
+
+    interface OnClickListener {
+        fun onClick(position: Int, model: HappyPlaceModel)
+    }
+    
+    fun setOnClickListener(onClickListener: OnClickListener) {
+        this.onClickListener = onClickListener
+    }
+
+    fun setOnClickListener(onClickListener: HappyPlacesAdapter.OnClickListener, function: () -> Unit) {
+
     }
 
 
