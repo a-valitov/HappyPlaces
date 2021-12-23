@@ -7,4 +7,6 @@
     <string name="location">Location</string>
     <string name="text_add_image">ADD IMAGE</string>
     <string name="btn_save_text">SAVE</string>
+    <string name="note_text_no_happy_places_found_yet">No happy places found yet. Feel free to add one!</string>
+    <string name="image_content_description">image</string>
 </resources>

@@ -35,6 +35,7 @@ android {
 dependencies {
 
     implementation 'com.karumi:dexter:6.2.3'
+    implementation 'de.hdodenhof:circleimageview:3.0.2'  // apparently, for circle image views
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.6.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
