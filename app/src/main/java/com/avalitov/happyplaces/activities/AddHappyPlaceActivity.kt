@@ -79,7 +79,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         tvAddImage = findViewById(R.id.tv_add_image)
         tvAddImage.setOnClickListener(this)
 
-        ivPlaceImage = findViewById(R.id.iv_place_image)
+        ivPlaceImage = findViewById(R.id.iv_details_place_image)
 
         btnSave = findViewById(R.id.btn_save)
         btnSave.setOnClickListener(this)

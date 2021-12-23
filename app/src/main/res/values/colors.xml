@@ -20,6 +20,9 @@
     <color name="circular_image_border_color">#757575</color>
     <color name="item_happy_place_description_text_color">#606060</color>
 
+    <!-- For Details Activity -->
+    <color name="detail_screen_description_text_color">#757575</color>
+
 <!--    So many lost songs -->
 <!--    #051e3e • #251e3e • #451e3e • #651e3e • #851e3e-->
 
