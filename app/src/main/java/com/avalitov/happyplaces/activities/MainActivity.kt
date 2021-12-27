@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         tvNoPlacesFound = findViewById(R.id.tv_no_places_found)
 
         fabHappyPlace.setOnClickListener {
-            val intent = Intent(this, AddHappyPlaceActivity::class.java)
+            val intent = Intent(this, AddOrEditHappyPlaceActivity::class.java)
             startActivityForResult(intent, ADD_PLACE_ACTIVITY_REQUEST_CODE)
         }
 

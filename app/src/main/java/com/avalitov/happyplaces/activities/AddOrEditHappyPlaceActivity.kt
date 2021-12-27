@@ -40,7 +40,7 @@ lateinit var tvAddImage : TextView
 private lateinit var ivPlaceImage : ImageView
 lateinit var btnSave : Button
 
-class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
+class AddOrEditHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
     private var cal = Calendar.getInstance()
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
@@ -53,7 +53,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_happy_place)
+        setContentView(R.layout.activity_add_or_edit_happy_place)
 
         etTitle = findViewById(R.id.et_title)
         etDescription = findViewById(R.id.et_description)
@@ -212,7 +212,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                             ivPlaceImage.setImageBitmap(selectedImageBitmap)
                         } catch (e: IOException) {
                             e.printStackTrace()
-                            Toast.makeText(this@AddHappyPlaceActivity,
+                            Toast.makeText(this@AddOrEditHappyPlaceActivity,
                                     "Failed to load an image from Gallery", Toast.LENGTH_SHORT)
                                     .show()
                         }

@@ -8,11 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.avalitov.happyplaces.R
-import com.avalitov.happyplaces.activities.AddHappyPlaceActivity
+import com.avalitov.happyplaces.activities.AddOrEditHappyPlaceActivity
 import com.avalitov.happyplaces.activities.MainActivity
 import com.avalitov.happyplaces.models.HappyPlaceModel
 
@@ -50,7 +49,7 @@ open class HappyPlacesAdapter(
      * To notify the adapter that from this particular element we want to make changes
      */
     fun notifyEditItem(activity: Activity, position: Int, requestCode: Int) {
-        val intent = Intent(context, AddHappyPlaceActivity::class.java)
+        val intent = Intent(context, AddOrEditHappyPlaceActivity::class.java)
         intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS, list[position])
         activity.startActivityForResult(intent, requestCode)
         notifyItemChanged(position) // required so RV would see changes
