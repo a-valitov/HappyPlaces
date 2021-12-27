@@ -14,6 +14,7 @@ import com.avalitov.happyplaces.R
 import com.avalitov.happyplaces.adapters.HappyPlacesAdapter
 import com.avalitov.happyplaces.database.DatabaseHandler
 import com.avalitov.happyplaces.models.HappyPlaceModel
+import com.avalitov.happyplaces.utils.SwipeToDeleteCallback
 import com.avalitov.happyplaces.utils.SwipeToEditCallback
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -69,6 +70,19 @@ class MainActivity : AppCompatActivity() {
         }
         val editItemTouchHelper = ItemTouchHelper(editSwipeHandler)
         editItemTouchHelper.attachToRecyclerView(rvHappyPlacesList)
+
+        /**
+         * Using SwipeHandler for deleting an RV item via swipe
+         */
+        val deleteSwipeHandler = object : SwipeToDeleteCallback(this){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = rvHappyPlacesList.adapter as HappyPlacesAdapter
+                adapter.notifyEditItem(this@MainActivity, viewHolder.adapterPosition,
+                    ADD_PLACE_ACTIVITY_REQUEST_CODE)
+            }
+        }
+        val deleteItemTouchHelper = ItemTouchHelper(deleteSwipeHandler)
+        deleteItemTouchHelper.attachToRecyclerView(rvHappyPlacesList)
     }
 
 
