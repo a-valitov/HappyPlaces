@@ -49,25 +49,11 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
     private var mLatitude : Double = 0.0
     private var mLongitude : Double = 0.0
 
+    private var mHappyPlaceDetails : HappyPlaceModel? = null // Current HP that we work with
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_happy_place)
-
-        toolbarAddPlace = findViewById(R.id.tb_add_place)
-        setSupportActionBar(toolbarAddPlace)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        toolbarAddPlace.setNavigationOnClickListener {
-            onBackPressed()
-        }
-
-        dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-            cal.set(Calendar.YEAR, year)
-            cal.set(Calendar.MONTH, month)
-            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-
-            updateDateInView()
-        }
 
         etTitle = findViewById(R.id.et_title)
         etDescription = findViewById(R.id.et_description)
@@ -84,8 +70,59 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         btnSave = findViewById(R.id.btn_save)
         btnSave.setOnClickListener(this)
 
+        toolbarAddPlace = findViewById(R.id.tb_add_place)
+        setSupportActionBar(toolbarAddPlace)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        toolbarAddPlace.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
+        /**
+         * If some data (HappyPlaceModel) has been passed here via intent,
+         * that means user wants to EDIT the HP item
+         */
+        if(intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS)) {
+            mHappyPlaceDetails = intent.getParcelableExtra(
+                MainActivity.EXTRA_PLACE_DETAILS)
+                    as HappyPlaceModel?
+        }
+
+        dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+            cal.set(Calendar.YEAR, year)
+            cal.set(Calendar.MONTH, month)
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+            updateDateInView()
+        }
+
+        //updateDateInView()
+
+        if(mHappyPlaceDetails != null) {
+            /**
+             * That means we already have an HP, so it's editing mode
+             * Setting up the fields of HP that we edit
+             */
+            setupHappyPlaceForEditing()
+        }
+
     }
 
+    private fun setupHappyPlaceForEditing() {
+        supportActionBar?.title = "Edit Happy Place"
+
+        etTitle.setText(mHappyPlaceDetails!!.title)
+        etDescription.setText(mHappyPlaceDetails!!.description)
+        etDate.setText(mHappyPlaceDetails!!.date)
+        etLocation.setText(mHappyPlaceDetails!!.location)
+        mLatitude = mHappyPlaceDetails!!.latitude
+        mLongitude = mHappyPlaceDetails!!.longitude
+
+        saveImageToInternalStorage = Uri.parse(mHappyPlaceDetails!!.imagePath)
+        ivPlaceImage.setImageURI(saveImageToInternalStorage)
+
+        btnSave.text = "UPDATE"
+    }
 
     override fun onClick(v: View?) {
         when(v!!.id) {
