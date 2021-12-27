@@ -27,12 +27,15 @@ class HappyPlaceDetailsActivity : AppCompatActivity() {
         var happyPlaceDetailModel : HappyPlaceModel? = null
 
         /**
-         * First, we get the object (HappyPlaceModel) from intent's serialized extra
+         * First, we get the object (HappyPlaceModel) from intent's Serialized
+         * or Parcelable extra. The Serialize is easier to use (requires
+         * no boilerplate code), but Parcelable is more efficient in terms
+         * of time and memory leaks.
          */
         if(intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS)) {
             happyPlaceDetailModel =
-                intent.getSerializableExtra(MainActivity.EXTRA_PLACE_DETAILS)
-                        as HappyPlaceModel
+                intent.getParcelableExtra(MainActivity.EXTRA_PLACE_DETAILS)
+                        as HappyPlaceModel?
         }
 
         /**
