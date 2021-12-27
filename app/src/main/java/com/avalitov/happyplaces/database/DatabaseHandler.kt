@@ -84,7 +84,19 @@ SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
         )
 
         db.close()
+        return result
+    }
 
+    fun deletePlace(place: HappyPlaceModel) : Int{
+
+        val db = this.writableDatabase
+        val result = db.delete(
+            TABLE_PLACES,
+            COLUMN_ID + "=" + place.id,
+            null
+        )
+
+        db.close()
         return result
     }
 

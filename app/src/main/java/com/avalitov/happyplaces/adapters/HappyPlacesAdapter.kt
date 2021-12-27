@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.avalitov.happyplaces.R
 import com.avalitov.happyplaces.activities.AddOrEditHappyPlaceActivity
 import com.avalitov.happyplaces.activities.MainActivity
+import com.avalitov.happyplaces.database.DatabaseHandler
 import com.avalitov.happyplaces.models.HappyPlaceModel
 
 open class HappyPlacesAdapter(
@@ -53,6 +54,23 @@ open class HappyPlacesAdapter(
         intent.putExtra(MainActivity.EXTRA_PLACE_DETAILS, list[position])
         activity.startActivityForResult(intent, requestCode)
         notifyItemChanged(position) // required so RV would see changes
+    }
+
+    /**
+     * To notify the adapter that from this particular element we want to delete
+     */
+//    fun notifyDeleteItem(position: Int) {
+//        list.removeAt(position)
+//        notifyItemChanged(position) // required so RV would see changes
+//    }
+
+    fun deleteAt(position: Int) {
+        val dbHandler = DatabaseHandler(context)
+        val isDeleted = dbHandler.deletePlace(list[position])
+        if (isDeleted > 0) {
+            list.removeAt(position)
+            notifyItemRemoved(position)
+        }
     }
 
     override fun getItemCount(): Int {
