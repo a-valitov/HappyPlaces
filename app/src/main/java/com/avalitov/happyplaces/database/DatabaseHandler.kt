@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
+import androidx.core.content.contentValuesOf
 import com.avalitov.happyplaces.models.HappyPlaceModel
 
 class DatabaseHandler(context: Context) :
@@ -58,6 +59,29 @@ SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
         val db = this.writableDatabase
         val result = db.insert(TABLE_PLACES, null, values)
+
+        db.close()
+
+        return result
+    }
+
+    fun updatePlace(place: HappyPlaceModel) : Int{
+        val values = ContentValues()
+        values.put(COLUMN_TITLE, place.title)
+        values.put(COLUMN_IMAGE_PATH, place.imagePath)
+        values.put(COLUMN_DESCRIPTION, place.description)
+        values.put(COLUMN_DATE, place.date)
+        values.put(COLUMN_LOCATION, place.location)
+        values.put(COLUMN_LATITUDE, place.latitude)
+        values.put(COLUMN_LONGITUDE, place.longitude)
+
+        val db = this.writableDatabase
+        val result = db.update(
+            TABLE_PLACES,
+            values,
+            COLUMN_ID + "=" + place.id,
+            null
+        )
 
         db.close()
 

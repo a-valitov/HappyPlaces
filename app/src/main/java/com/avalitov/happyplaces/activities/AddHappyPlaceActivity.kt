@@ -164,7 +164,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     } else -> {
                         // all fields are OK and we can save the Place
                         val happyPlace = HappyPlaceModel(
-                                id = 0,  //default number, SQLite is going to autoincrement it anyway
+                                id = if (mHappyPlaceDetails == null) 0 else mHappyPlaceDetails!!.id,
+                                // 0 is a default number, SQLite is going to autoincrement it anyway
                                 title = etTitle.text.toString(),
                                 imagePath = saveImageToInternalStorage.toString(),
                                 description = etDescription.text.toString(),
@@ -174,8 +175,18 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                                 longitude = mLongitude
                         )
                         val dbHandler = DatabaseHandler(this)
-                        val addHappyPlace = dbHandler.addPlace(happyPlace)
-                        if (addHappyPlace > 0) {
+
+                        /**
+                         * If there is an HP in mHappyPlaceDetails, we update.
+                         * Otherwise we create a new HP in database.
+                         */
+                        val saveHappyPlaceResult =
+                                if (mHappyPlaceDetails == null){
+                                    dbHandler.addPlace(happyPlace)
+                                } else {
+                                    dbHandler.updatePlace(happyPlace).toLong()
+                                }
+                        if (saveHappyPlaceResult > 0) {
                             setResult(Activity.RESULT_OK)
                             finish()    // the Activity may be closed
                         }
